@@ -36,16 +36,7 @@ To get started with Baier Finances, follow these steps:
     cd baier-finances
     ```
 
-## 2. Install Dependencies
-
-To install the necessary dependencies for the project, run the following command in your terminal:
-
-```bash
-npm install
-
-```
-
-## 3. Set Up Environment Variables
+## 2. Set Up Environment Variables
 
 Before running the application, you need to set up your environment variables. Create a file named `.env` in the root directory of your project and add the following variables:
 
@@ -73,7 +64,7 @@ APPLE_CERTIFICATE=
 APPLE_REDIRECT_URI=
 ```
 
-## 4. Install Dependencies
+## 3. Install Dependencies
 
 Once your environment variables are set, you need to install the required dependencies for the project. Navigate to the project directory in your terminal and run the following command:
 
@@ -84,7 +75,7 @@ npm install
 
 This command will install all the necessary packages listed in your package.json file, including Next.js, Prisma, and any other dependencies required for your application.
 
-## 5. Run the Development Server
+## 4. Run the Development Server
 
 After installing the dependencies, you can start the development server to see your application in action. In your terminal, run the following command:
 
