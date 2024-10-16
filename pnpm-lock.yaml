@@ -17,6 +17,12 @@ dependencies:
   '@lucia-auth/adapter-prisma':
     specifier: ^4.0.1
     version: 4.0.1(@prisma/client@5.20.0)(lucia@3.2.0)
+  '@mdi/js':
+    specifier: ^7.4.47
+    version: 7.4.47
+  '@mdi/react':
+    specifier: ^1.6.1
+    version: 1.6.1
   '@prisma/client':
     specifier: ^5.16.1
     version: 5.20.0(prisma@5.20.0)
@@ -86,9 +92,6 @@ dependencies:
   three-globe:
     specifier: ^2.31.0
     version: 2.32.0(three@0.165.0)
-  zipcodes:
-    specifier: ^8.0.0
-    version: 8.0.0
   zod:
     specifier: ^3.23.8
     version: 3.23.8
@@ -118,6 +121,9 @@ devDependencies:
   prisma:
     specifier: ^5.16.1
     version: 5.20.0
+  tailwind-scrollbar:
+    specifier: ^3.1.0
+    version: 3.1.0(tailwindcss@3.4.13)
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.13
@@ -323,6 +329,16 @@ packages:
     dependencies:
       '@prisma/client': 5.20.0(prisma@5.20.0)
       lucia: 3.2.0
+    dev: false
+
+  /@mdi/js@7.4.47:
+    resolution: {integrity: sha512-KPnNOtm5i2pMabqZxpUz7iQf+mfrYZyKCZ8QNz85czgEt7cuHcGorWfdzUMWYA0SD+a6Hn4FmJ+YhzzzjkTZrQ==}
+    dev: false
+
+  /@mdi/react@1.6.1:
+    resolution: {integrity: sha512-4qZeDcluDFGFTWkHs86VOlHkm6gnKaMql13/gpIcUQ8kzxHgpj31NuCkD8abECVfbULJ3shc7Yt4HJ6Wu6SN4w==}
+    dependencies:
+      prop-types: 15.8.1
     dev: false
 
   /@mediapipe/tasks-vision@0.10.8:
@@ -4365,6 +4381,15 @@ packages:
     resolution: {integrity: sha512-d9ZolCAIzom1nf/5p4LdD5zvjmgSxY0BGgdSvmXIoMYAiPdAW/dSpP7joCDYFY7r/HkEa2qmPtkgsu0xjQeQtw==}
     dev: false
 
+  /tailwind-scrollbar@3.1.0(tailwindcss@3.4.13):
+    resolution: {integrity: sha512-pmrtDIZeHyu2idTejfV59SbaJyvp1VRjYxAjZBH0jnyrPRo6HL1kD5Glz8VPagasqr6oAx6M05+Tuw429Z8jxg==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      tailwindcss: 3.x
+    dependencies:
+      tailwindcss: 3.4.13
+    dev: true
+
   /tailwindcss-animate@1.0.7(tailwindcss@3.4.13):
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
     peerDependencies:
@@ -4809,10 +4834,6 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-  /zipcodes@8.0.0:
-    resolution: {integrity: sha512-V8NolFaJhsPamGeCv5lJdk60Q7JBiXI6e+8JDksPC1NJWZ0t7g1OFfqVLZb2Nc2F5jmf9JTdYdWJBnIhGBvtbA==}
-    dev: false
 
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
