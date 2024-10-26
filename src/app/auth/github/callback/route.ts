@@ -38,18 +38,6 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
 
-    // If no user is found with GitHub ID, check if a user exists with the same username or email
-    if (!existingUser) {
-      existingUser = await prisma.user.findFirst({
-        where: {
-          OR: [
-            { userName: githubUser.login }, // Fallback: look for user by GitHub username
-            { email: githubUser.email }, // If the email is available and saved
-          ],
-        },
-      });
-    }
-
     if (existingUser) {
       // User exists, create a new session
       const session = await lucia.createSession(existingUser.id, {});

@@ -37,15 +37,6 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
 
-    // If no user is found by Facebook ID, search by email or username
-    if (!existingUser) {
-      existingUser = await prisma.user.findFirst({
-        where: {
-          OR: [{ email: facebookUser.email }, { userName: facebookUser.name }],
-        },
-      });
-    }
-
     if (existingUser) {
       // Create a session and set the session cookie
       const session = await lucia.createSession(existingUser.id, {});

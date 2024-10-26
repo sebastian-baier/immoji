@@ -38,18 +38,6 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
 
-    // If no user is found by Google ID, search by email or username
-    if (!existingUser) {
-      existingUser = await prisma.user.findFirst({
-        where: {
-          OR: [
-            { email: googleUser.email }, // If the email is available
-            { userName: googleUser.name }, // Look for user by Google userName
-          ],
-        },
-      });
-    }
-
     if (existingUser) {
       // Create a session and set the session cookie
       const session = await lucia.createSession(existingUser.id, {});
