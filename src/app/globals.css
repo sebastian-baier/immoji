@@ -5,15 +5,15 @@
 *,
 *::before,
 *::after {
-	box-sizing: border-box; /* Set box-sizing to border-box */
+  box-sizing: border-box; /* Set box-sizing to border-box */
 }
 
 html {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
