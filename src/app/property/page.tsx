@@ -14,15 +14,16 @@ import {
 } from '@/components/dialog';
 import { Icons } from '@/components/icons';
 
-import { validateSession } from '@/actions/auth/validateSession';
+
 import { getPropertiesOfOwner } from '@/actions/property/get-properties-of-owner';
 import CreatePropertyForm from '@/containers/property/create-property-form';
 import { PropertyCard } from '@/containers/property/property-card';
 import { PropertyWithDetails } from '@/types/property';
 import Link from 'next/link';
+import { getCurrentSession } from '@/lib/auth/session';
 
 export default async function Property() {
-  const { user } = await validateSession();
+  const { user } = await getCurrentSession();
 
   if (!user) {
     return redirect('/auth');

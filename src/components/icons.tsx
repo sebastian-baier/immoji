@@ -21,6 +21,7 @@ import {
   mdiOfficeBuildingRemove,
   mdiPlus,
   mdiViewDashboardVariant,
+  mdiCheckCircle
 } from '@mdi/js';
 import Icon from '@mdi/react';
 import { IconProps } from '@mdi/react/dist/IconProps';
@@ -59,4 +60,6 @@ export const Icons = {
   google: (props: Omit<IconProps, 'path'>) => <Icon size={1} path={mdiGoogle} {...props} />,
   facebook: (props: Omit<IconProps, 'path'>) => <Icon size={1} path={mdiFacebook} {...props} />,
   apple: (props: Omit<IconProps, 'path'>) => <Icon size={1} path={mdiApple} {...props} />,
+  checkCircle: (props: Omit<IconProps, 'path'>) => <Icon size={1} path={mdiCheckCircle} {...props} />,
+
 };
