@@ -1,100 +1,94 @@
 import { cookies } from 'next/headers';
 
-import { OAuth2RequestError } from 'arctic';
-import { generateIdFromEntropySize } from 'lucia';
+import { ObjectParser } from '@pilcrowjs/object-parser';
+import { type OAuth2Tokens, decodeIdToken } from 'arctic';
 
 import { google } from '@/lib/auth/arctic';
-import { lucia } from '@/lib/auth/lucia';
+import { setSessionTokenCookie } from '@/lib/auth/cookies';
+import { createSession, generateSessionToken } from '@/lib/auth/session';
 import { prisma } from '@/lib/database/prisma';
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
-  const storedCodeVerifier = cookies().get('google_oauth_code_verifier')?.value ?? null;
   const storedState = cookies().get('google_oauth_state')?.value ?? null;
-
-  if (!code || !state || !storedState || !storedCodeVerifier || state !== storedState) {
-    return new Response(null, {
+  const codeVerifier = cookies().get('google_code_verifier')?.value ?? null;
+  if (
+    code === null ||
+    state === null ||
+    storedState === null ||
+    codeVerifier === null ||
+    state !== storedState
+  ) {
+    return new Response('Please restart the process.', {
       status: 400,
     });
   }
 
+  let tokens: OAuth2Tokens;
   try {
-    const tokens = await google.validateAuthorizationCode(code, storedCodeVerifier);
-    const googleUserResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
-      },
+    tokens = await google.validateAuthorizationCode(code, codeVerifier);
+  } catch (e) {
+    // Invalid code or client credentials
+    return new Response('Please restart the process.', {
+      status: 400,
+    });
+  }
+
+  const claims = decodeIdToken(tokens.idToken());
+  const claimsParser = new ObjectParser(claims);
+
+  const googleId = claimsParser.getString('sub');
+  const name = claimsParser.getString('name');
+  const picture = claimsParser.getString('picture');
+  const email = claimsParser.getString('email');
+
+  if (googleId === null)
+    return new Response('Google Id null', {
+      status: 400,
     });
 
-    const googleUser: GoogleUser = await googleUserResponse.json();
-    // console.log(googleUser);
-
-    // Try to find a user by Google ID first
-    let existingUser = await prisma.user.findFirst({
-      where: {
-        googleId: googleUser.sub, // "sub" is Google's unique user ID
+  // TODO: Replace this with your own DB query.
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      googleId: {
+        equals: googleId,
+        not: null,
       },
-    });
+    },
+  });
 
-    if (existingUser) {
-      // Create a session and set the session cookie
-      const session = await lucia.createSession(existingUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: '/',
-        },
-      });
-    }
-
-    // No existing user found, create a new user
-    const userId = generateIdFromEntropySize(10); // Generate unique user ID
-
-    await prisma.user.create({
-      data: {
-        id: userId,
-        googleId: googleUser.sub, // googleId can be null if not provided
-        userName: googleUser.name,
-        email: googleUser.email, // Save the email if available
-        picture: googleUser.picture,
-        role: 'USER',
-      },
-    });
-
-    // Create a session and set the session cookie
-    const session = await lucia.createSession(userId, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-
+  if (existingUser !== null) {
+    console.log(existingUser);
+    const sessionToken = generateSessionToken();
+    const session = await createSession(sessionToken, existingUser.id);
+    setSessionTokenCookie(sessionToken, session.expiresAt);
     return new Response(null, {
       status: 302,
       headers: {
         Location: '/',
       },
     });
-  } catch (e) {
-    // Handle OAuth error
-    console.log(e);
-
-    if (e instanceof OAuth2RequestError) {
-      // Invalid code
-      return new Response(null, {
-        status: 400,
-      });
-    }
-    return new Response(null, {
-      status: 500,
-    });
   }
-}
 
-interface GoogleUser {
-  sub: string;
-  name?: string;
-  email?: string;
-  picture?: string;
+  const user = await prisma.user.create({
+    data: {
+      googleId: googleId, // googleId can be null if not provided
+      userName: name,
+      email: email,
+      picture: picture,
+      role: 'USER',
+    },
+  });
+
+  const sessionToken = generateSessionToken();
+  const session = await createSession(sessionToken, user.id);
+  setSessionTokenCookie(sessionToken, session.expiresAt);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: '/',
+    },
+  });
 }

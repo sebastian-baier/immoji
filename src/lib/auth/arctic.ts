@@ -2,9 +2,12 @@ import { GitHub } from 'arctic';
 import { Google } from 'arctic';
 import { Facebook } from 'arctic';
 import { Apple } from 'arctic';
-import type { AppleCredentials } from 'arctic';
 
-export const github = new GitHub(process.env.GITHUB_CLIENT_ID!, process.env.GITHUB_CLIENT_SECRET!);
+export const github = new GitHub(
+  process.env.GITHUB_CLIENT_ID!,
+  process.env.GITHUB_CLIENT_SECRET!,
+  null,
+);
 
 export const google = new Google(
   process.env.GOOGLE_CLIENT_ID!,
@@ -18,11 +21,11 @@ export const facebook = new Facebook(
   process.env.FACEBOOK_REDIRECT_URI!,
 );
 
-const credentials: AppleCredentials = {
-  clientId: process.env.APPLE_CLIENT_ID!,
-  teamId: process.env.APPLE_TEAM_ID!,
-  keyId: process.env.APPLE_KEY_ID!,
-  certificate: process.env.APPLE_CERTIFICATE!,
-};
+// const credentials: AppleCredentials = {
+//   clientId: process.env.APPLE_CLIENT_ID!,
+//   teamId: process.env.APPLE_TEAM_ID!,
+//   keyId: process.env.APPLE_KEY_ID!,
+//   certificate: process.env.APPLE_CERTIFICATE!,
+// };
 
-export const apple = new Apple(credentials, process.env.APPLE_REDIRECT_URI!);
+// export const apple = new Apple(credentials, process.env.APPLE_REDIRECT_URI!);

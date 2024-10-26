@@ -2,19 +2,20 @@ import dynamic from 'next/dynamic';
 
 import { User } from '@prisma/client';
 
+import { getCurrentSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/database/prisma';
 
-import { validateSession } from '@/actions/auth/validateSession';
+import SideNav from '@/containers/nav/sidenav';
 
 import './globals.css';
 
 // Dynamically import the Navbar
-const SideNav = dynamic(() => import('@/containers/nav/sidenav'), {
-  ssr: false,
-});
+// const SideNav = dynamic(() => import('@/containers/nav/sidenav'), {
+//   ssr: true,
+// });
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { user } = await validateSession();
+  const { user } = await getCurrentSession();
   let isLoggedIn = false;
   let dbUser: User | null = null;
 

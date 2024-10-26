@@ -7,7 +7,7 @@ import { github } from '@/lib/auth/arctic';
 
 export async function GET(): Promise<Response> {
   const state = generateState();
-  const url = await github.createAuthorizationURL(state);
+  const url = await github.createAuthorizationURL(state, ['user:email']);
 
   cookies().set('github_oauth_state', state, {
     path: '/',
@@ -17,5 +17,10 @@ export async function GET(): Promise<Response> {
     sameSite: 'lax',
   });
 
-  return Response.redirect(url);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: url.toString(),
+    },
+  });
 }

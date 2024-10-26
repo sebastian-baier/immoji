@@ -6,7 +6,9 @@ import dynamic from 'next/dynamic';
 
 import { motion } from 'framer-motion';
 
-const World = dynamic(() => import('./globe').then((m) => m.World), {
+const World = dynamic(() => import('./globe').then((m) => ({
+  default: m.World
+})), {
   ssr: false,
 });
 

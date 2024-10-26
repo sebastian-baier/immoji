@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 
 import { validateSession } from '@/actions/auth/validateSession';
 
-export default async function Property({ params }: { params: { id: string } }) {
+export default async function Property(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const { user } = await validateSession();
 
   if (!user) {

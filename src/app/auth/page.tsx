@@ -1,20 +1,11 @@
 'use server';
 
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 import { Button } from '@/components/button';
 import { Icons } from '@/components/icons';
 
-import { validateSession } from '@/actions/auth/validateSession';
-
-export default async function RealEstate() {
-  const { user } = await validateSession();
-
-  if (user) {
-    return redirect('/');
-  }
-
+export default async function Auth() {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex flex-col gap-6">
