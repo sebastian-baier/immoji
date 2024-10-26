@@ -3,13 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
-  id           String       @id @default(uuid())
+  id           String        @id @default(uuid())
   userName     String?
   githubId     String?
   googleId     String?
@@ -17,12 +17,12 @@ model User {
   appleId      String?
   email        String?
   name         String?
-  role         Role         @default(USER)
+  role         Role          @default(USER)
   picture      String?
   transactions Transaction[] // User transactions
-  sessions     Session[]    // User sessions
-  files        File[]       // Files associated with the user
-  properties   Property[]   // Optional relationship to properties
+  sessions     Session[] // User sessions
+  files        File[] // Files associated with the user
+  properties   Property[] // Optional relationship to properties
 }
 
 model Session {
@@ -30,7 +30,7 @@ model Session {
   userId    String
   expiresAt DateTime
 
-  user      User     @relation(references: [id], fields: [userId])
+  user User @relation(references: [id], fields: [userId])
 }
 
 enum Role {
@@ -39,20 +39,20 @@ enum Role {
 }
 
 model Transaction {
-  id Int @id @default(autoincrement())
-  comment String?
-  value Decimal
+  id         Int             @id @default(autoincrement())
+  comment    String?
+  value      Decimal
   categoryId String
-  type TransactionType
-  user User @relation(fields: [userId], references: [id])
-  userId String
+  type       TransactionType
+  user       User            @relation(fields: [userId], references: [id])
+  userId     String
 
   category TransactionCategory @relation(fields: [categoryId], references: [id])
 }
 
 model TransactionCategory {
-  id       String       @id @default(uuid())
-  name     String       @unique
+  id           String        @id @default(uuid())
+  name         String        @unique
   transactions Transaction[] // Categories for transactions
 }
 
@@ -62,136 +62,139 @@ enum TransactionType {
 }
 
 model Property {
-  id                          String       @id @default(uuid())
-  objectNumber                String?
-  address                     String
-  zipCode                     Int
-  houseNumber                 String
-  type                        PropertyTypes
-  rentValue                   Decimal         @default(0.0)
-  additionalCosts             Decimal         @default(0.0)
-  purchasePrice               Decimal?
-  rentAdjustmentHistory       RentAdjustmentHistory[] // History of rents and rent increases
-  currentRenterId             String?      // Reference to the current tenant
-  currentRenter               Renter? @relation(fields: [currentRenterId], references: [id])
-  loans                       Loan[]       // Loans associated with the property
-  maintenances                Maintenance[] // Maintenance records
-  files                       File[]       // Files associated with the property
-  userId                      String        // Mandatory reference to the owner user
-  owner                       User          @relation(fields: [userId], references: [id])
+  id                    String                  @id @default(uuid())
+  objectNumber          String?
+  address               String
+  zipCode               Int
+  houseNumber           String
+  type                  PropertyTypes
+  rentValue             Decimal                 @default(0.0)
+  additionalCosts       Decimal                 @default(0.0)
+  purchasePrice         Decimal?
+  rentAdjustmentHistory RentAdjustmentHistory[] // History of rents and rent increases
+  currentRenterId       String? // Reference to the current tenant
+  currentRenter         Renter?                 @relation(fields: [currentRenterId], references: [id])
+  loans                 Loan[] // Loans associated with the property
+  maintenances          Maintenance[] // Maintenance records
+  files                 File[] // Files associated with the property
+  userId                String // Mandatory reference to the owner user
+  owner                 User                    @relation(fields: [userId], references: [id])
 
-  area                        Float?        // Optional: Fläche der Immobilie in Quadratmetern
-  constructionYear            Int?          // Optional: Baujahr
-  roomCount                   Int?          // Optional: Anzahl der Zimmer
-  renterHistory               RenterHistory[]
+  area             Float? // Optional: Fläche der Immobilie in Quadratmetern
+  constructionYear Int? // Optional: Baujahr
+  roomCount        Int? // Optional: Anzahl der Zimmer
+  renterHistory    RenterHistory[]
 
-  features                    PropertyFeature[] @relation("PropertyFeatures")
+  features PropertyFeature[] @relation("PropertyFeatures")
+  parentId String? // Referenz auf das übergeordnete Property
+  parent   Property?         @relation("PropertyHierarchy", fields: [parentId], references: [id])
+  children Property[]        @relation("PropertyHierarchy")
 }
 
 enum PropertyTypes {
+  COMPLEX
   APARTMENT
   HOUSE
   GARAGE
 }
 
 model PropertyFeature {
-  id          String   @id @default(uuid())
-  name        String   @unique  // Name der Ausstattung, z.B. "Balkon", "Garage"
-  properties  Property[] @relation("PropertyFeatures") // Viele-zu-viele Beziehung zu Immobilien
+  id         String     @id @default(uuid())
+  name       String     @unique // Name der Ausstattung, z.B. "Balkon", "Garage"
+  properties Property[] @relation("PropertyFeatures") // Viele-zu-viele Beziehung zu Immobilien
 }
 
 model Renter {
-  id                String    @id @default(uuid())
-  firstName         String    // Vorname des Mieters
-  lastName          String    // Nachname des Mieters
-  email             String
-  phoneNumber       String
-  properties        Property[] // Ein Mieter kann mehrere Immobilien mieten
-  startRentDate     DateTime
-  endRentDate       DateTime?
+  id            String     @id @default(uuid())
+  firstName     String // Vorname des Mieters
+  lastName      String // Nachname des Mieters
+  email         String
+  phoneNumber   String
+  properties    Property[] // Ein Mieter kann mehrere Immobilien mieten
+  startRentDate DateTime
+  endRentDate   DateTime?
 
-  renterHistory     RenterHistory[]
-  files             File[]
+  renterHistory RenterHistory[]
+  files         File[]
 }
 
 model RenterHistory {
-  id          String @id @default(uuid())
-  renterId    String
-  propertyId  String
-  startDate   DateTime
-  endDate     DateTime?
+  id         String    @id @default(uuid())
+  renterId   String
+  propertyId String
+  startDate  DateTime
+  endDate    DateTime?
 
-  renter      Renter   @relation(fields: [renterId], references: [id])
-  property    Property @relation(fields: [propertyId], references: [id])
+  renter   Renter   @relation(fields: [renterId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
 }
 
 model RentAdjustmentHistory {
-  id                Int       @id @default(autoincrement())
-  propertyId        String     // Reference to the property
-  rentValue         Decimal    // Value of the rent adjustment
-  date              DateTime   // Date of the adjustment
-  reason            String?    // Reason for the adjustment
+  id         Int      @id @default(autoincrement())
+  propertyId String // Reference to the property
+  rentValue  Decimal // Value of the rent adjustment
+  date       DateTime // Date of the adjustment
+  reason     String? // Reason for the adjustment
 
-  property          Property   @relation(fields: [propertyId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
 
-  files             File[]     @relation("RentAdjustmentFiles") // Many-to-Many relation with files
+  files File[] @relation("RentAdjustmentFiles") // Many-to-Many relation with files
 }
 
 model Loan {
-  id                Int       @id @default(autoincrement())
-  propertyId        String
-  lender            String    // Bank oder Kreditgeber
-  principalAmount   Decimal   // Darlehenssumme
-  interestRate      Decimal   // Zinssatz
-  startDate         DateTime  // Startdatum des Darlehens
-  endDate           DateTime  // Enddatum des Darlehens
-  monthlyPayment    Decimal   // Monatliche Rate
-  remainingBalance  Decimal   // Restbetrag
+  id              Int      @id @default(autoincrement())
+  propertyId      String
+  lender          String // Bank oder Kreditgeber
+  principalAmount Decimal // Darlehenssumme
+  interestRate    Decimal // Zinssatz
+  startDate       DateTime // Startdatum des Darlehens
+  endDate         DateTime // Enddatum des Darlehens
+  monthlyPayment  Decimal // Monatliche Rate
 
-  property          Property  @relation(fields: [propertyId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
 }
 
 model Maintenance {
-  id                Int       @id @default(autoincrement())
-  propertyId        String    // Referenz zur Immobilie
-  date              DateTime  // Datum der Wartung
-  cost              Decimal   // Kosten der Wartung
-  description       String    // Beschreibung der Wartung
+  id          Int      @id @default(autoincrement())
+  propertyId  String // Referenz zur Immobilie
+  date        DateTime // Datum der Wartung
+  cost        Decimal // Kosten der Wartung
+  description String // Beschreibung der Wartung
 
-  property          Property  @relation(fields: [propertyId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
 
-  files             File[]    @relation("MaintenanceFiles") // Many-to-Many relation with files
+  files File[] @relation("MaintenanceFiles") // Many-to-Many relation with files
 }
 
 model File {
   id          String   @id @default(uuid())
-  userId      String   // Mandatory reference to the user who uploaded the file
-  propertyId  String?  // Optional reference to the associated property
-  renterId    String?  // Optional reference to the associated renter
-  url         String   // URL or path of the file
-  description String?  // Optional description of the file
+  userId      String // Mandatory reference to the user who uploaded the file
+  propertyId  String? // Optional reference to the associated property
+  renterId    String? // Optional reference to the associated renter
+  url         String // URL or path of the file
+  description String? // Optional description of the file
   createdAt   DateTime @default(now()) // Timestamp of when the file was created
 
-  user        User      @relation(fields: [userId], references: [id]) // Mandatory relationship
-  property    Property? @relation(fields: [propertyId], references: [id]) // Optional relationship
-  renter      Renter?   @relation(fields: [renterId], references: [id]) // Optional relationship
+  user     User      @relation(fields: [userId], references: [id]) // Mandatory relationship
+  property Property? @relation(fields: [propertyId], references: [id]) // Optional relationship
+  renter   Renter?   @relation(fields: [renterId], references: [id]) // Optional relationship
 
   // Many-to-Many Relations
-  maintenance Maintenance[] @relation("MaintenanceFiles")
+  maintenance     Maintenance[]           @relation("MaintenanceFiles")
   rentAdjustments RentAdjustmentHistory[] @relation("RentAdjustmentFiles")
-  tags        FileTag[] @relation("FileTags") // Updated Many-to-Many relation with FileTag
+  tags            FileTag[]               @relation("FileTags") // Updated Many-to-Many relation with FileTag
 }
 
 model FileTag {
-  id          String   @id @default(uuid())
-  name        String   @unique // Name of the tag (e.g., rentContract, rentIncrease)
-  files       File[]   @relation("FileTags") // Many-to-many relationship with files
+  id    String @id @default(uuid())
+  name  String @unique // Name of the tag (e.g., rentContract, rentIncrease)
+  files File[] @relation("FileTags") // Many-to-many relationship with files
 }
 
 model Tax {
   id          String   @id @default(uuid())
-  propertyId  String   // Reference to the property
-  amount      Decimal  // Amount of the tax or fee
+  propertyId  String // Reference to the property
+  amount      Decimal // Amount of the tax or fee
   date        DateTime // Date of the tax payment
-  description String   // Optional description of the tax
+  description String // Optional description of the tax
 }
