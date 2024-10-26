@@ -85,77 +85,80 @@ export default function Stepper() {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6 p-6 border rounded-lg w-[100%]"
+                className="flex flex-col justify-between p-6 border rounded-lg w-[100%] h-full"
             >
-                <div className="flex justify-between">
-                    <h2 className="text-lg font-medium">Immobilie erstellen</h2>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">
-                            Schritt {stepper.current.index + 1} von {steps.length}
-                        </span>
+
+                <div className='flex flex-col gap-6'>
+                    <div className="flex justify-between">
+                        <h2 className="text-lg font-medium">Immobilie erstellen</h2>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                Schritt {stepper.current.index + 1} von {steps.length}
+                            </span>
+                        </div>
                     </div>
+                    <nav aria-label="Checkout Steps" className="group ">
+                        <ol
+                            className="flex items-center justify-between gap-2"
+                            aria-orientation="horizontal"
+                        >
+                            {stepper.all.map((step, index, array) => (
+                                <React.Fragment key={step.id}>
+                                    <li className="flex items-center gap-4 flex-shrink-0">
+                                        <Button
+                                            type="button"
+                                            role="tab"
+                                            variant={
+                                                index <= stepper.current.index ? 'default' : 'secondary'
+                                            }
+                                            aria-current={
+                                                stepper.current.id === step.id ? 'step' : undefined
+                                            }
+                                            aria-posinset={index + 1}
+                                            aria-setsize={steps.length}
+                                            aria-selected={stepper.current.id === step.id}
+                                            className="flex size-10 items-center justify-center rounded-full"
+                                            onClick={() => stepper.goTo(step.id)}
+                                        >
+                                            {index + 1}
+                                        </Button>
+                                        <span className="text-sm font-medium">{step.label}</span>
+                                    </li>
+                                    {index < array.length - 1 && (
+                                        <Separator
+                                            className={`flex-1 ${index < stepper.current.index ? 'bg-purple-900' : 'bg-neutral-100'
+                                                }`}
+                                        />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </ol>
+                    </nav>
                 </div>
-                <nav aria-label="Checkout Steps" className="group my-4">
-                    <ol
-                        className="flex items-center justify-between gap-2"
-                        aria-orientation="horizontal"
-                    >
-                        {stepper.all.map((step, index, array) => (
-                            <React.Fragment key={step.id}>
-                                <li className="flex items-center gap-4 flex-shrink-0">
-                                    <Button
-                                        type="button"
-                                        role="tab"
-                                        variant={
-                                            index <= stepper.current.index ? 'default' : 'secondary'
-                                        }
-                                        aria-current={
-                                            stepper.current.id === step.id ? 'step' : undefined
-                                        }
-                                        aria-posinset={index + 1}
-                                        aria-setsize={steps.length}
-                                        aria-selected={stepper.current.id === step.id}
-                                        className="flex size-10 items-center justify-center rounded-full"
-                                        onClick={() => stepper.goTo(step.id)}
-                                    >
-                                        {index + 1}
-                                    </Button>
-                                    <span className="text-sm font-medium">{step.label}</span>
-                                </li>
-                                {index < array.length - 1 && (
-                                    <Separator
-                                        className={`flex-1 ${index < stepper.current.index ? 'bg-purple-900' : 'bg-neutral-100'
-                                            }`}
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </ol>
-                </nav>
-                <div className="space-y-4">
+                <div>
                     {stepper.switch({
                         type: () => <ShippingComponent />,
                         payment: () => <PaymentComponent />,
                         complete: () => <CompleteComponent />,
                     })}
-                    {!stepper.isLast ? (
-                        <div className="flex justify-end gap-4">
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={stepper.prev}
-                                disabled={stepper.isFirst}
-                            >
-                                Back
-                            </Button>
-                            <Button>{stepper.isLast ? 'Complete' : 'Next'}</Button>
-                        </div>
-                    ) : (
-                        <Button type="button" onClick={stepper.reset}>
-                            Reset
-                        </Button>
-                    )}
                 </div>
+                {!stepper.isLast ? (
+                    <div className="flex justify-end gap-4">
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={stepper.prev}
+                            disabled={stepper.isFirst}
+                        >
+                            Back
+                        </Button>
+                        <Button>{stepper.isLast ? 'Complete' : 'Next'}</Button>
+                    </div>
+                ) : (
+                    <Button type="button" onClick={stepper.reset}>
+                        Reset
+                    </Button>
+                )}
             </form>
         </Form>
     );

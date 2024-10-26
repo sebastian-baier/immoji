@@ -4,5 +4,5 @@ import { CreateTest } from '@/containers/property/create-test';
 
 export default async function Create() {
 
-    return <div className='flex flex-col gap-6 items-start'><Stepper></Stepper></div>;
+    return <div className='flex flex-col gap-6 items-start h-full'><Stepper></Stepper></div>;
 }
