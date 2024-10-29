@@ -1,4 +1,5 @@
-import { PropertyTypes, Renter } from '@prisma/client';
+import { Property, PropertyFeature, PropertyTypes, Renter } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
 // Stelle sicher, dass die richtigen Imports vorhanden sind
 
@@ -18,4 +19,19 @@ export type PropertyWithDetails = {
   tenant: Renter | null; // Name des Mieters
   purchasePrice: number | null; // Kaufpreis
   yield: number | null; // Berechnete Rendite
+};
+
+type PropertyWithoutIdAndTimestamps = Omit<
+  Property,
+  'id' | 'createdAt' | 'updatedAt' | 'userId'
+> & {
+  features?: Omit<PropertyFeature, 'id'>[];
+};
+
+export type PropertyWithNumbers = {
+  [K in keyof PropertyWithoutIdAndTimestamps]: PropertyWithoutIdAndTimestamps[K] extends Decimal
+    ? number
+    : PropertyWithoutIdAndTimestamps[K] extends Decimal | null
+      ? number | null // Wenn es Decimal | null ist, wird es zu number | null
+      : PropertyWithoutIdAndTimestamps[K]; // Andernfalls bleibt der Typ unverändert
 };

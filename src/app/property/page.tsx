@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { Button } from '@/components/button';
+import { CreatePropertyButton } from '@/components/create-property-button';
 import { Icons } from '@/components/icons';
 
 import { getCurrentSession } from '@/lib/auth/session';
@@ -50,6 +51,48 @@ export default async function Property() {
             </Link>
           </Button>
         </div>
+      </div>
+      <div className="flex flex-row gap-4">
+        <CreatePropertyButton
+          data={{
+            objectNumber: '253',
+            address: 'Göthering',
+            zipCode: 90451,
+            houseNumber: '10c',
+            type: 'APARTMENT',
+            rentValue: 1000,
+            additionalCosts: 150,
+            purchasePrice: 200000,
+            currentRenterId: null,
+            area: 85.5,
+            constructionYear: 1995,
+            roomCount: 3,
+            parentId: null,
+            features: [{ name: 'Balcony' }, { name: 'Garage' }],
+          }}
+        >
+          Erstelle Immo mit alle Werten
+        </CreatePropertyButton>
+        <CreatePropertyButton
+          data={{
+            objectNumber: null,
+            address: 'Göthering',
+            zipCode: 90422,
+            houseNumber: '20b',
+            type: 'HOUSE',
+            rentValue: 1000,
+            additionalCosts: 150,
+            purchasePrice: null,
+            currentRenterId: null,
+            area: null,
+            constructionYear: null,
+            roomCount: null,
+            parentId: null,
+            features: [],
+          }}
+        >
+          Erstelle Immo ohne optionalen Werten
+        </CreatePropertyButton>
       </div>
     </div>
   );
