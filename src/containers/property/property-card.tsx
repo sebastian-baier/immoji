@@ -134,7 +134,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Kaufpreis
               </label>
               <p id="rent-value" className="text-sm">
-                {property.rentValue} €
+                {property.purchasePrice} €
               </p>
             </div>
           )}

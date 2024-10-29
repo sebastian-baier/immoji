@@ -2,8 +2,6 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { Property, PropertyFeature } from '@prisma/client';
-
 import { getCurrentSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/database/prisma';
 import { propertySchema } from '@/lib/zod/property';
