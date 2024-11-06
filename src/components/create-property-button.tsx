@@ -5,8 +5,8 @@ import { Property, PropertyFeature } from '@prisma/client';
 import { createProperty } from '@/actions/property/create-property';
 import { PropertyWithNumbers } from '@/types/property';
 
-import { Button } from './button';
-import { Icons } from './icons';
+import { Button } from './custom-ui/button';
+import { Icons } from './custom-ui/icons';
 
 export function CreatePropertyButton({
   data,

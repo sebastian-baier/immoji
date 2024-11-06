@@ -1,6 +1,6 @@
 'use server';
 
-import { Button } from '@/components/button';
+import { Button } from '@/components/custom-ui/button';
 
 export default async function Transaction() {
   return (

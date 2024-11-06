@@ -18,7 +18,7 @@ dependencies:
     specifier: ^0.2.2
     version: 0.2.2(@fortawesome/fontawesome-svg-core@6.6.0)(react@18.3.1)
   '@hookform/resolvers':
-    specifier: ^3.9.0
+    specifier: ^3.9.1
     version: 3.9.1(react-hook-form@7.53.1)
   '@mdi/js':
     specifier: ^7.4.47
@@ -39,7 +39,7 @@ dependencies:
     specifier: ^5.16.1
     version: 5.21.1(prisma@5.21.1)
   '@radix-ui/react-avatar':
-    specifier: ^1.1.0
+    specifier: ^1.1.1
     version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
   '@radix-ui/react-dialog':
     specifier: ^1.1.2
@@ -93,7 +93,7 @@ dependencies:
     specifier: ^18
     version: 18.3.1(react@18.3.1)
   react-hook-form:
-    specifier: ^7.53.0
+    specifier: ^7.53.1
     version: 7.53.1(react@18.3.1)
   tailwind-merge:
     specifier: ^2.3.0

@@ -8,9 +8,9 @@ import { useRouter } from 'next/navigation';
 
 import { User } from '@prisma/client';
 
-import { Button } from '@/components/button';
-import { Icons } from '@/components/icons';
-import { Spinner } from '@/components/spinner';
+import { Button } from '@/components/custom-ui/button';
+import { Icons } from '@/components/custom-ui/icons';
+import { Spinner } from '@/components/custom-ui/spinner';
 
 import { logout } from '@/actions/auth/logout';
 
@@ -98,11 +98,11 @@ export default function SideNav({ isLoggedIn, user }: { isLoggedIn: boolean; use
               <p className="text-lg font-medium text-white">{user?.userName}</p>
             </div>
             <Button
-              variant={'ghostIcon'}
-              size={'icon'}
+              variant={'icon'}
               aria-label="Logout"
               onClick={handleLogout}
               disabled={isLoading}
+              className="p-0 m-0 bg-transparent"
             >
               {isLoading ? (
                 <Spinner size="md" className="border-t-gray-600" />

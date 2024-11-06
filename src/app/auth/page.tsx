@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 
-import { Button } from '@/components/button';
-import { Icons } from '@/components/icons';
+import { Button } from '@/components/custom-ui/button';
+import { Icons } from '@/components/custom-ui/icons';
 
 export default async function Auth() {
   return (

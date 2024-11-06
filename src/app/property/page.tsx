@@ -3,13 +3,13 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { Button } from '@/components/button';
 import { CreatePropertyButton } from '@/components/create-property-button';
-import { Icons } from '@/components/icons';
+import { Button } from '@/components/custom-ui/button';
+import { Icons } from '@/components/custom-ui/icons';
 
 import { getCurrentSession } from '@/lib/auth/session';
 
-import { getPropertiesOfOwner } from '@/actions/property/get-properties-of-owner';
+import { getPropertiesOfOwner } from '@/actions/property/get-properties';
 import { PropertyCard } from '@/containers/property/property-card';
 import { PropertyWithDetails } from '@/types/property';
 

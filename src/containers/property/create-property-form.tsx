@@ -7,9 +7,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PropertyTypes } from '@prisma/client';
 import { z } from 'zod';
 
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
+import { Button } from '@/components/custom-ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import { createProperty } from '@/actions/property/create-property';
 

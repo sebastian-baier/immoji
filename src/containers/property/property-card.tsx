@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 
 import { PropertyTypes } from '@prisma/client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/avatar';
-import { Badge } from '@/components/badge';
 // Assuming you have a Badge component
-import { Icons } from '@/components/icons';
+import { Icons } from '@/components/custom-ui/icons';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 
 import { cn } from '@/lib/utils';
 
