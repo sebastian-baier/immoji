@@ -39,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <SideNav isLoggedIn={isLoggedIn} user={dbUser} />
           <main
             id="main-content"
-            className="w-full overflow-y-auto rounded-3xl bg-white p-12 scrollbar-none dark:bg-neutral-900"
+            className="w-full overflow-y-auto rounded-3xl bg-white scrollbar-none dark:bg-neutral-900 p-12"
           >
             {children}
           </main>
