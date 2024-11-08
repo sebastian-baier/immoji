@@ -152,7 +152,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
       <div className="relative flex flex-col justify-center gap-3 rounded-3xl border-2 border-dotted px-4 py-2">
         <p className="text-sm font-semibold">Mieter</p>
 
-        {!property.tenant ? (
+        {!property.currentRenter ? (
           <Avatar className="h-12 w-12 self-center rounded-3xl border-2">
             <AvatarFallback>?</AvatarFallback>
           </Avatar>
@@ -163,7 +163,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Vorname
               </label>
               <p id="first-name" className="text-sm">
-                {property.tenant?.firstName}
+                {property.currentRenter?.firstName}
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -171,7 +171,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Nachname
               </label>
               <p id="last-name" className="text-sm">
-                {property.tenant?.lastName}
+                {property.currentRenter?.lastName}
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -179,7 +179,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Email
               </label>
               <p id="email" className="text-sm">
-                {property.tenant?.email}
+                {property.currentRenter?.email}
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -187,7 +187,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Telefonnummer
               </label>
               <p id="phone-number" className="text-sm">
-                {property.tenant?.phoneNumber}
+                {property.currentRenter?.phoneNumber}
               </p>
             </div>
           </div>

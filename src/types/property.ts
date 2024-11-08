@@ -1,4 +1,4 @@
-import { Property, PropertyFeature, PropertyTypes, Renter } from '@prisma/client';
+import { Loan, Property, PropertyFeature, PropertyTypes, Renter } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 // Stelle sicher, dass die richtigen Imports vorhanden sind
@@ -16,9 +16,10 @@ export type PropertyWithDetails = {
   rentStatus: 'RENTED' | 'NOT_RENTED' | 'TERMINATED'; // Mietstatus
   area: number | null; // Fläche
   roomCount: number | null; // Zimmeranzahl
-  tenant: Renter | null; // Name des Mieters
+  currentRenter: Renter | null; // Name des Mieters
   purchasePrice: number | null; // Kaufpreis
   yield: number | null; // Berechnete Rendite
+  loans: Loan[];
 };
 
 type PropertyWithoutIdAndTimestamps = Omit<

@@ -89,6 +89,8 @@ model Property {
   parentId String? // Referenz auf das übergeordnete Property
   parent   Property?         @relation("PropertyHierarchy", fields: [parentId], references: [id])
   children Property[]        @relation("PropertyHierarchy")
+
+  // TODO add hausverwaltung
 }
 
 enum PropertyTypes {
