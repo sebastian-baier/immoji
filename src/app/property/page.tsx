@@ -13,7 +13,7 @@ import { getPropertiesOfOwner } from '@/actions/property/get-properties';
 import { PropertyCard } from '@/containers/property/property-card';
 import { PropertyWithDetails } from '@/types/property';
 
-export default async function Property() {
+export default async function PropertyPage() {
   const { user } = await getCurrentSession();
 
   if (!user) {

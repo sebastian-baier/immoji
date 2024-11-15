@@ -39,7 +39,10 @@ export function Banner({ property }: { property: PropertyWithDetails }) {
       </div>
       <p>TODO here should be a cool image or google maps</p>
       {/* TODO replace with icon of a pen or similar */}
-      <Button>Bearbeiten</Button>
+      <Button aria-label="edit page button">
+        <Icons.fileOutlineEdit />
+        Bearbeiten
+      </Button>
     </div>
   );
 }

@@ -7,6 +7,8 @@ import { Icons } from '@/components/custom-ui/icons';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 
+import { cn } from '@/lib/utils';
+
 import { getPropertyById } from '@/actions/property/get-properties';
 import { Banner } from '@/containers/property/banner';
 
@@ -15,12 +17,29 @@ export default async function Property(props: { params: Promise<{ id: string }> 
 
   if (!property) notFound();
 
-  function PropertyDetail({ label, value }: { label: string; value: string }) {
+  function PropertyDetail({
+    label,
+    labelClassName,
+    value,
+    valueClassName,
+    containerClassName,
+  }: {
+    label: string;
+    labelClassName?: string;
+    value: string;
+    valueClassName?: string;
+    containerClassName?: string;
+  }) {
     // TODO pass style to make more customizable
     return (
-      <div>
-        <Label>{label}</Label>
-        <p>{value}</p>
+      <div
+        className={cn(
+          'flex flex-col items-center gap-2 rounded-md p-4 border-solid border-2 border-gray-100 shadow-md',
+          containerClassName,
+        )}
+      >
+        <Label className={cn('text-gray-600 text-md', labelClassName)}>{label}</Label>
+        <p className={cn('text-xl font-semibold', valueClassName)}>{value}</p>
       </div>
     );
   }
@@ -41,8 +60,9 @@ export default async function Property(props: { params: Promise<{ id: string }> 
       <Banner property={property} />
 
       <div className="w-full flex flex-row justify-between px-12">
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <PropertyDetail
+            containerClassName="col-span-2"
             label="Kaufpreis"
             value={!property.purchasePrice ? '' : `${property.purchasePrice.toString()} €`}
           />
@@ -75,10 +95,10 @@ export default async function Property(props: { params: Promise<{ id: string }> 
               )} */}
         </div>
 
-        <div className="flex flex-col gap-6 items-start">
+        <div className="flex flex-col gap-6 items-end">
           <RentStatusBadge rentStatus={property.rentStatus} />
-          <div className="relative flex flex-col justify-center gap-3 rounded-3xl border-2 border-dotted px-4 py-2">
-            <p className="text-sm font-semibold">Mieter</p>
+          <div className="relative flex flex-col justify-center gap-8 rounded-md border-solid border-2 border-gray-100 shadow-md px-6 py-4">
+            <p className="text-gray-600 text-md font-semibold">Mieter</p>
 
             {property.currentRenter?.id ? (
               <>
@@ -96,8 +116,8 @@ export default async function Property(props: { params: Promise<{ id: string }> 
                 </p>
               </>
             ) : (
-              <div className="flex flex-col gap-2 items-center">
-                <p>bis jetzt kein Mieter vorhanden</p>
+              <div className="flex flex-col gap-4 px-8 items-center">
+                <p>kein Mieter vorhanden</p>
                 <Button>
                   <Icons.plus />
                 </Button>

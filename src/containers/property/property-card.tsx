@@ -74,7 +74,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
 
   return (
     <div
-      className="relative flex w-[350px] cursor-pointer flex-col gap-2 rounded-3xl border-2 border-slate-300 px-4 py-6"
+      className="relative flex w-[350px] cursor-pointer flex-col gap-5 rounded-3xl border-2 border-slate-300 px-4 py-6"
       onClick={() => router.push(`/property/${property.id}`)}
     >
       {/* Status as Badge */}
@@ -104,50 +104,55 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
           </div>
         )}
       </div>
-      <div className="flex flex-row">
-        <div>
-          {property.area && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-400" htmlFor="area">
-                Fläche
-              </label>
-              <p id="area" className="text-sm">
-                {property.area} m²
-              </p>
-            </div>
-          )}
-          {property.roomCount && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-400" htmlFor="room-count">
-                Zimmer
-              </label>
-              <p id="room-count" className="text-sm">
-                {property.roomCount}
-              </p>
-            </div>
-          )}
-        </div>
-        <div>
-          {property.purchasePrice && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
-                Kaufpreis
-              </label>
-              <p id="rent-value" className="text-sm">
-                {property.purchasePrice} €
-              </p>
-            </div>
-          )}
+      <div className="grid grid-cols-2 gap-y-4">
+        {property.area && (
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
-              Kaltmiete
+            <label className="text-sm font-medium text-gray-400" htmlFor="area">
+              Fläche
             </label>
-            <p id="rent-value" className="text-sm">
-              {property.rentValue} €
+            <p id="area" className="text-sm">
+              {property.area} m²
             </p>
           </div>
-          {property.yield && <div className="text-sm">Rendite: {property.yield}%</div>}
+        )}
+        {property.roomCount && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-400" htmlFor="room-count">
+              Zimmer
+            </label>
+            <p id="room-count" className="text-sm">
+              {property.roomCount}
+            </p>
+          </div>
+        )}
+        {property.purchasePrice && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
+              Kaufpreis
+            </label>
+            <p id="rent-value" className="text-sm">
+              {property.purchasePrice} €
+            </p>
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
+            Kaltmiete
+          </label>
+          <p id="rent-value" className="text-sm">
+            {property.rentValue} €
+          </p>
         </div>
+        {property.yield && (
+          <div className="text-sm">
+            <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
+              Rendite
+            </label>
+            <p id="rent-value" className="text-sm">
+              {property.yield} %
+            </p>
+          </div>
+        )}
       </div>
       <div className="relative flex flex-col justify-center gap-3 rounded-3xl border-2 border-dotted px-4 py-2">
         <p className="text-sm font-semibold">Mieter</p>

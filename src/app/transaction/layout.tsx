@@ -1,5 +1,5 @@
-import SubLayout from '@/containers/layout/sub-layout';
+import ToolLayout from '@/containers/layout/tool-layout';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  return <SubLayout>{children}</SubLayout>;
+  return <ToolLayout>{children}</ToolLayout>;
 }
