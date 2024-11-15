@@ -14,7 +14,7 @@ export default async function Page() {
   return (
     <LandingLayout>
       <div className="flex flex-col justify-center items-center gap-16">
-        <div className="h-full w-full rounded-none bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
+        <div className="h-full w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
           <h1 className="md:text-7xl text-3xl lg:text-9xl font-bold text-center text-white relative z-20">
             Immoji
           </h1>

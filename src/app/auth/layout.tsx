@@ -1,7 +1,7 @@
 'use server';
 
-import ToolLayout from '@/containers/layout/tool-layout';
+import AuthLayout from '@/containers/layout/auth-layout';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  return <ToolLayout>{children}</ToolLayout>;
+  return <AuthLayout>{children}</AuthLayout>;
 }
