@@ -11,11 +11,18 @@ import { cn } from '@/lib/utils';
 
 import { getPropertyById } from '@/actions/property/get-properties';
 import { Banner } from '@/containers/property/banner';
+import { RentStatus } from '@/types/property';
 
 export default async function Property(props: { params: Promise<{ id: string }> }) {
   const property = await getPropertyById((await props.params).id);
 
   if (!property) notFound();
+
+  const status = !property.currentRenter
+    ? RentStatus.NOT_RENTED
+    : !property.currentRenter.endRentDate
+      ? RentStatus.TERMINATED
+      : RentStatus.RENTED;
 
   function PropertyDetail({
     label,
@@ -44,13 +51,13 @@ export default async function Property(props: { params: Promise<{ id: string }> 
     );
   }
 
-  function RentStatusBadge({ rentStatus }: { rentStatus: 'RENTED' | 'NOT_RENTED' | 'TERMINATED' }) {
+  function RentStatusBadge({ rentStatus }: { rentStatus: RentStatus }) {
     switch (rentStatus) {
-      case 'NOT_RENTED':
+      case RentStatus.NOT_RENTED:
         return <Badge className="bg-red-600 text-lg">Nicht vermietet</Badge>;
-      case 'RENTED':
+      case RentStatus.RENTED:
         return <Badge className="bg-green-600 text-lg">Vermietet</Badge>;
-      case 'TERMINATED':
+      case RentStatus.TERMINATED:
         return <Badge className="bg-yellow-600 text-lg">Gekündigt</Badge>;
     }
   }
@@ -60,20 +67,22 @@ export default async function Property(props: { params: Promise<{ id: string }> 
       <Banner property={property} />
 
       <div className="w-full flex flex-row justify-between px-12">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <PropertyDetail
-            containerClassName="col-span-2"
+            containerClassName="col-span-3"
             label="Kaufpreis"
             value={!property.purchasePrice ? '' : `${property.purchasePrice.toString()} €`}
           />
           <PropertyDetail
             label="Kaltmiete"
             value={!property.rentValue ? '' : `${property.rentValue.toString()} €`}
+            containerClassName="col-span-1"
           />
           <PropertyDetail
             label="Nebenkosten"
             value={!property.additionalCosts ? '' : `${property.additionalCosts.toString()} €`}
           />
+          <Button className="col-span-3">Mieterhöhung</Button>
           <PropertyDetail
             label="Wohnfläche"
             value={!property.area ? '' : `${property.area.toString()} m²`}
@@ -81,6 +90,10 @@ export default async function Property(props: { params: Promise<{ id: string }> 
           <PropertyDetail
             label="Zimmer Anzahl"
             value={!property.roomCount ? '' : `${property.roomCount.toString()}`}
+          />
+          <PropertyDetail
+            label="Baujahr"
+            value={!property.constructionYear ? '' : `${property.constructionYear.toString()}`}
           />
           {/* TODO add loans e.g. with carousel or dropdown */}
           {/* {property.loans && (
@@ -96,7 +109,7 @@ export default async function Property(props: { params: Promise<{ id: string }> 
         </div>
 
         <div className="flex flex-col gap-6 items-end">
-          <RentStatusBadge rentStatus={property.rentStatus} />
+          <RentStatusBadge rentStatus={status} />
           <div className="relative flex flex-col justify-center gap-8 rounded-md border-solid border-2 border-gray-100 shadow-md px-6 py-4">
             <p className="text-gray-600 text-md font-semibold">Mieter</p>
 

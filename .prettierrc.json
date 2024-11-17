@@ -1,8 +1,17 @@
 {
-  "$schema": "https://json.schemastore.org/prettierrc",
+  "endOfLine": "lf",
+  "semi": false,
   "singleQuote": true,
+  "jsxSingleQuote": true,
+  "printWidth": 70,
   "tabWidth": 2,
   "trailingComma": "all",
+  "useTabs": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "quoteProps": "as-needed",
+  "arrowParens": "always",
   "importOrder": [
     "^react",
     "^next",
@@ -13,12 +22,7 @@
     "^@/(.*)$",
     "^[./]"
   ],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "printWidth": 100,
-  "semi": true,
-  "bracketSpacing": true,
-  "proseWrap": "never",
-  "endOfLine": "lf",
-  "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"]
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "importOrderTypeScriptVersion": "5.4.2"
 }

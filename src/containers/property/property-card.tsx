@@ -11,58 +11,58 @@ import { Badge } from '@/components/ui/badge';
 
 import { cn } from '@/lib/utils';
 
-import { PropertyWithDetails } from '@/types/property';
+import { PropertyWithDetails, RentStatus } from '@/types/property';
 
-const getStatusColor = (status: 'RENTED' | 'NOT_RENTED' | 'TERMINATED') => {
+const getStatusColor = (status: RentStatus) => {
   switch (status) {
-    case 'RENTED':
+    case RentStatus.RENTED:
       return 'bg-green-500 text-white';
-    case 'NOT_RENTED':
+    case RentStatus.NOT_RENTED:
       return 'bg-red-500 text-white';
-    case 'TERMINATED':
+    case RentStatus.TERMINATED:
       return 'bg-yellow-500 text-black';
     default:
       return 'bg-gray-500 text-white';
   }
 };
 
-const getStatusIcon = (status: 'RENTED' | 'NOT_RENTED' | 'TERMINATED', type: PropertyTypes) => {
+const getStatusIcon = (status: RentStatus, type: PropertyTypes) => {
   switch (type) {
     case PropertyTypes.APARTMENT:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.apartment size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.apartmentRemove size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.apartmentCog size={1} />;
       }
     case PropertyTypes.GARAGE:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.garage size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.garageOpen size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.garageAlert size={1} />;
       }
     case PropertyTypes.HOUSE:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.home size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.homeAlert size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.homeClock size={1} />;
       }
 
     default:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.apartment size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.apartment size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.apartment size={1} />;
       }
   }
@@ -70,7 +70,7 @@ const getStatusIcon = (status: 'RENTED' | 'NOT_RENTED' | 'TERMINATED', type: Pro
 
 export const PropertyCard = ({ property }: { property: PropertyWithDetails }) => {
   const router = useRouter(); // Hier useRouter verwenden
-  const status = property.rentStatus; // Example rentStatus from your data
+  const status = !property.currentRenter ? RentStatus.NOT_RENTED : !property.currentRenter.endRentDate ? RentStatus.TERMINATED : RentStatus.RENTED;
 
   return (
     <div
@@ -143,13 +143,13 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
             {property.rentValue} €
           </p>
         </div>
-        {property.yield && (
+        {property.purchasePrice && (
           <div className="text-sm">
             <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
               Rendite
             </label>
             <p id="rent-value" className="text-sm">
-              {property.yield} %
+              {+(property.rentValue * 12 / property.purchasePrice * 100).toFixed(2)} %
             </p>
           </div>
         )}
