@@ -1,10 +1,10 @@
 'use server';
 
 export default async function Dashboard() {
-  return (
-    <>
-      {/* EXAMPLE */}
-      {/* <form action={createUser}>
+	return (
+		<>
+			{/* EXAMPLE */}
+			{/* <form action={createUser}>
 				<Label htmlFor='userName'>Your email address</Label>
 				<Input
 					id='userName'
@@ -22,6 +22,6 @@ export default async function Dashboard() {
 					</div>
 				);
 			})} */}
-    </>
-  );
+		</>
+	);
 }

@@ -1,28 +1,33 @@
 {
 	"recommendations": [
+		//general
+		"medo64.render-crlf",
+		"yzhang.markdown-all-in-one",
+		"kisstkondoros.vscode-gutter-preview",
+		"jock.svg",
+
+		//editor style
+		"vscode-icons-team.vscode-icons",
+
+		//spell check
 		"streetsidesoftware.code-spell-checker",
 		"streetsidesoftware.code-spell-checker-german",
+
+		//nextjs
+		"xabikos.JavaScriptSnippets",
 		"mikestead.dotenv",
 		"dbaeumer.vscode-eslint",
-		"kisstkondoros.vscode-gutter-preview",
-		"naumovs.color-highlight",
-		"VisualStudioExptTeam.vscodeintellicode",
-		"VisualStudioExptTeam.intellicode-api-usage-examples",
-		"yzhang.markdown-all-in-one",
+		"esbenp.prettier-vscode",
+		"YoavBls.pretty-ts-errors",
 		"christian-kohler.npm-intellisense",
 		"christian-kohler.path-intellisense",
-		"esbenp.prettier-vscode",
-		"medo64.render-crlf",
-		"vscode-icons-team.vscode-icons",
-		"tomoki1207.pdf",
-		"tonybaloney.vscode-pets",
-		"ms-mssql.data-workspace-vscode",
-		"YoavBls.pretty-ts-errors",
+
+		//db
+		"Prisma.prisma",
+
+		//tailwind
 		"stivo.tailwind-fold",
 		"austenc.tailwind-docs",
-		"ChakrounAnas.turbo-console-log",
-		"bradlc.vscode-tailwindcss",
-		"jock.svg",
-		"formulahendry.auto-close-tag"
+		"bradlc.vscode-tailwindcss"
 	]
 }

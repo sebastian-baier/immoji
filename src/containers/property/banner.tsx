@@ -9,11 +9,11 @@ export function Banner({ property }: { property: PropertyWithDetails }) {
       case 'APARTMENT':
         return <Icons.apartment size={3} />;
       case 'COMPLEX':
-        return <Icons.apartment />;
+        return <Icons.apartment size={3} />;
       case 'HOUSE':
-        return <Icons.home />;
+        return <Icons.home size={3} />;
       case 'GARAGE':
-        return <Icons.garage />;
+        return <Icons.garage size={3} />;
     }
   }
 
