@@ -1,0 +1,13 @@
+.cache
+public
+node_modules
+*.esm.js
+build
+dist
+.next
+out
+next-env.d.ts
+*.json
+src/assets/
+.eslintrc.js
+next.config.js

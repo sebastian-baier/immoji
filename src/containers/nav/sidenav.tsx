@@ -41,13 +41,13 @@ export default function SideNav({ isLoggedIn, user }: { isLoggedIn: boolean; use
   return (
     <>
       {/* Mobile Menu Toggle */}
-      <button
+      <Button
         className="p-4 text-white md:hidden"
         onClick={() => setSidebarOpen(!isSidebarOpen)}
         aria-label={isSidebarOpen ? 'Close navigation' : 'Open navigation'}
       >
         <Icons.menu />
-      </button>
+      </Button>
 
       {/* Sidebar Component */}
       <aside

@@ -11,58 +11,58 @@ import { Badge } from '@/components/ui/badge';
 
 import { cn } from '@/lib/utils';
 
-import { PropertyWithDetails } from '@/types/property';
+import { PropertyWithDetails, RentStatus } from '@/types/property';
 
-const getStatusColor = (status: 'RENTED' | 'NOT_RENTED' | 'TERMINATED') => {
+const getStatusColor = (status: RentStatus) => {
   switch (status) {
-    case 'RENTED':
+    case RentStatus.RENTED:
       return 'bg-green-500 text-white';
-    case 'NOT_RENTED':
+    case RentStatus.NOT_RENTED:
       return 'bg-red-500 text-white';
-    case 'TERMINATED':
+    case RentStatus.TERMINATED:
       return 'bg-yellow-500 text-black';
     default:
       return 'bg-gray-500 text-white';
   }
 };
 
-const getStatusIcon = (status: 'RENTED' | 'NOT_RENTED' | 'TERMINATED', type: PropertyTypes) => {
+const getStatusIcon = (status: RentStatus, type: PropertyTypes) => {
   switch (type) {
     case PropertyTypes.APARTMENT:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.apartment size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.apartmentRemove size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.apartmentCog size={1} />;
       }
     case PropertyTypes.GARAGE:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.garage size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.garageOpen size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.garageAlert size={1} />;
       }
     case PropertyTypes.HOUSE:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.home size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.homeAlert size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.homeClock size={1} />;
       }
 
     default:
       switch (status) {
-        case 'RENTED':
+        case RentStatus.RENTED:
           return <Icons.apartment size={1} />;
-        case 'NOT_RENTED':
+        case RentStatus.NOT_RENTED:
           return <Icons.apartment size={1} />;
-        case 'TERMINATED':
+        case RentStatus.TERMINATED:
           return <Icons.apartment size={1} />;
       }
   }
@@ -70,11 +70,11 @@ const getStatusIcon = (status: 'RENTED' | 'NOT_RENTED' | 'TERMINATED', type: Pro
 
 export const PropertyCard = ({ property }: { property: PropertyWithDetails }) => {
   const router = useRouter(); // Hier useRouter verwenden
-  const status = property.rentStatus; // Example rentStatus from your data
+  const status = !property.currentRenter ? RentStatus.NOT_RENTED : !property.currentRenter.endRentDate ? RentStatus.TERMINATED : RentStatus.RENTED;
 
   return (
     <div
-      className="relative flex w-[350px] cursor-pointer flex-col gap-2 rounded-3xl border-2 border-slate-300 px-4 py-6"
+      className="relative flex w-[350px] cursor-pointer flex-col gap-5 rounded-3xl border-2 border-slate-300 px-4 py-6"
       onClick={() => router.push(`/property/${property.id}`)}
     >
       {/* Status as Badge */}
@@ -104,55 +104,60 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
           </div>
         )}
       </div>
-      <div className="flex flex-row">
-        <div>
-          {property.area && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-400" htmlFor="area">
-                Fläche
-              </label>
-              <p id="area" className="text-sm">
-                {property.area} m²
-              </p>
-            </div>
-          )}
-          {property.roomCount && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-400" htmlFor="room-count">
-                Zimmer
-              </label>
-              <p id="room-count" className="text-sm">
-                {property.roomCount}
-              </p>
-            </div>
-          )}
-        </div>
-        <div>
-          {property.purchasePrice && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
-                Kaufpreis
-              </label>
-              <p id="rent-value" className="text-sm">
-                {property.purchasePrice} €
-              </p>
-            </div>
-          )}
+      <div className="grid grid-cols-2 gap-y-4">
+        {property.area && (
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
-              Kaltmiete
+            <label className="text-sm font-medium text-gray-400" htmlFor="area">
+              Fläche
             </label>
-            <p id="rent-value" className="text-sm">
-              {property.rentValue} €
+            <p id="area" className="text-sm">
+              {property.area} m²
             </p>
           </div>
-          {property.yield && <div className="text-sm">Rendite: {property.yield}%</div>}
+        )}
+        {property.roomCount && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-400" htmlFor="room-count">
+              Zimmer
+            </label>
+            <p id="room-count" className="text-sm">
+              {property.roomCount}
+            </p>
+          </div>
+        )}
+        {property.purchasePrice && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
+              Kaufpreis
+            </label>
+            <p id="rent-value" className="text-sm">
+              {property.purchasePrice} €
+            </p>
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
+            Kaltmiete
+          </label>
+          <p id="rent-value" className="text-sm">
+            {property.rentValue} €
+          </p>
         </div>
+        {property.purchasePrice && (
+          <div className="text-sm">
+            <label className="text-sm font-medium text-gray-400" htmlFor="rent-value">
+              Rendite
+            </label>
+            <p id="rent-value" className="text-sm">
+              {+(property.rentValue * 12 / property.purchasePrice * 100).toFixed(2)} %
+            </p>
+          </div>
+        )}
       </div>
       <div className="relative flex flex-col justify-center gap-3 rounded-3xl border-2 border-dotted px-4 py-2">
         <p className="text-sm font-semibold">Mieter</p>
 
-        {!property.tenant ? (
+        {!property.currentRenter ? (
           <Avatar className="h-12 w-12 self-center rounded-3xl border-2">
             <AvatarFallback>?</AvatarFallback>
           </Avatar>
@@ -163,7 +168,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Vorname
               </label>
               <p id="first-name" className="text-sm">
-                {property.tenant?.firstName}
+                {property.currentRenter?.firstName}
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -171,7 +176,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Nachname
               </label>
               <p id="last-name" className="text-sm">
-                {property.tenant?.lastName}
+                {property.currentRenter?.lastName}
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -179,7 +184,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Email
               </label>
               <p id="email" className="text-sm">
-                {property.tenant?.email}
+                {property.currentRenter?.email}
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -187,7 +192,7 @@ export const PropertyCard = ({ property }: { property: PropertyWithDetails }) =>
                 Telefonnummer
               </label>
               <p id="phone-number" className="text-sm">
-                {property.tenant?.phoneNumber}
+                {property.currentRenter?.phoneNumber}
               </p>
             </div>
           </div>
