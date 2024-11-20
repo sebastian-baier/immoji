@@ -4,19 +4,19 @@ import * as React from 'react';
 import { z } from 'zod';
 
 import { defineStepper } from '@stepperize/react';
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import { Separator } from '@/components/separator';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 
 import { PropertyTypes } from '@prisma/client';
 import { useForm, useFormContext, useWatch } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from "@/components/form"
+import { Form } from "@/components/ui/form"
 import { PropertyTypesComponent } from './property-types';
 
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/custom-ui/button';
 
 
 const libraries: Libraries = ['places'] as Libraries;
@@ -265,7 +265,7 @@ function AddressComponent() {
                     className="block w-full p-2 border rounded-md"
                 />
                 {errors.street && (
-                    <span className="text-sm text-destructive">
+                    <span className="text-sm text-red-600">
                         {errors.street.message}
                     </span>
                 )}
@@ -287,7 +287,7 @@ function AddressComponent() {
                         className="block w-full p-2 border rounded-md"
                     />
                     {errors.houseNumber && (
-                        <span className="text-sm text-destructive">
+                        <span className="text-sm text-red-600">
                             {errors.houseNumber.message}
                         </span>
                     )}
@@ -308,7 +308,7 @@ function AddressComponent() {
                         className="block w-full p-2 border rounded-md"
                     />
                     {errors.locality && (
-                        <span className="text-sm text-destructive">
+                        <span className="text-sm text-red-600">
                             {errors.locality.message}
                         </span>
                     )}
@@ -329,7 +329,7 @@ function AddressComponent() {
                         className="block w-full p-2 border rounded-md"
                     />
                     {errors.zipCode && (
-                        <span className="text-sm text-destructive">
+                        <span className="text-sm text-red-600">
                             {errors.zipCode.message}
                         </span>
                     )}
