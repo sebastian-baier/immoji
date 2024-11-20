@@ -16,6 +16,7 @@ import { getPropertyById } from '@/actions/property/get-properties'
 import { Banner } from '@/containers/property/banner'
 import { LastRentAdjustmentCard } from '@/containers/property/last-rent-adjustment-card'
 import { LoansCard } from '@/containers/property/loans-card'
+import { RentPaidOverview } from '@/containers/property/rent-paid-overview'
 import { RenterCard } from '@/containers/property/renter-card'
 import { RentStatus } from '@/types/property'
 
@@ -151,6 +152,7 @@ export default async function Property(props: {
 				<RenterCard currentRenter={property.currentRenter} />
 				<RentStatusBadge rentStatus={status} />
 			</div>
+			<RentPaidOverview />
 		</div>
 	)
 }
