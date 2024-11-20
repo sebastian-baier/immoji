@@ -25,7 +25,7 @@ const Months = [
 
 export function RentPaidOverview() {
 	return (
-		<Card className=''>
+		<Card>
 			<CardHeader>
 				<CardTitle className='text-md font-semibold text-gray-600'>
 					Miete 2024
@@ -34,7 +34,7 @@ export function RentPaidOverview() {
 			<CardContent className='flex flex-row gap-6'>
 				{Months.map((month) => (
 					<div
-						className='flex flex-col items-center justify-center gap-3'
+						className='flex min-w-28 flex-col items-center justify-center gap-3'
 						key={month}
 					>
 						<label htmlFor=''>{month}</label>

@@ -152,7 +152,9 @@ export default async function Property(props: {
 				<RenterCard currentRenter={property.currentRenter} />
 				<RentStatusBadge rentStatus={status} />
 			</div>
-			<RentPaidOverview />
+			<div className='flex w-full items-center justify-center'>
+				<RentPaidOverview />
+			</div>
 		</div>
 	)
 }
