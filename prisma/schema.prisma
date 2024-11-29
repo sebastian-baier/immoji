@@ -114,6 +114,7 @@ model Renter {
   properties    Property[] // Ein Mieter kann mehrere Immobilien mieten
   startRentDate DateTime
   endRentDate   DateTime?
+  //TODO add kaution
 
   renterHistory RenterHistory[]
   files         File[]
