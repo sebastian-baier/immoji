@@ -20,24 +20,24 @@ export const getPropertiesOfOwner = async (
 	const properties = await prisma.property.findMany({
 		where: { userId },
 		include: {
-			currentRenter: true,
-			loans: {
+			CurrentRenter: true,
+			Loans: {
 				orderBy: {
 					endDate: 'desc',
 				},
 			},
-			renterHistory: {
+			RenterHistory: {
 				orderBy: {
-					endDate: 'desc',
+					endRentDate: 'desc',
 				},
 			},
-			children: true,
-			features: true,
-			files: true,
-			maintenances: { orderBy: { date: 'desc' } },
-			owner: true,
-			parent: true,
-			rentAdjustmentHistory: { orderBy: { date: 'desc' } },
+			Children: true,
+			Features: true,
+			Files: true,
+			Maintenances: { orderBy: { date: 'desc' } },
+			Owner: true,
+			Parent: true,
+			RentAdjustmentHistory: { orderBy: { date: 'desc' } },
 		},
 	})
 
@@ -45,28 +45,29 @@ export const getPropertiesOfOwner = async (
 		return {
 			id: property.id,
 			objectNumber: property.objectNumber,
-			address: property.address,
+			street: property.street,
+			locality: property.locality,
 			zipCode: property.zipCode,
 			houseNumber: property.houseNumber,
-			type: property.type,
+			type: property.Type,
 			rentValue: property.rentValue.toNumber(),
 			additionalCosts: property.additionalCosts.toNumber(),
 			purchasePrice:
 				property.purchasePrice && property.purchasePrice.toNumber(),
-			rentAdjustmentHistory: property.rentAdjustmentHistory,
-			currentRenter: property.currentRenter,
-			loans: property.loans,
-			maintenances: property.maintenances,
-			files: property.files,
+			rentAdjustmentHistory: property.RentAdjustmentHistory,
+			currentRenter: property.CurrentRenter,
+			loans: property.Loans,
+			maintenances: property.Maintenances,
+			files: property.Files,
 			userId: property.userId,
-			owner: property.owner,
+			owner: property.Owner,
 			area: property.area,
 			roomCount: property.roomCount,
 			constructionYear: property.constructionYear,
-			renterHistory: property.renterHistory,
-			features: property.features,
-			parent: property.parent,
-			children: property.children,
+			renterHistory: property.RenterHistory,
+			features: property.Features,
+			parent: property.Parent,
+			children: property.Children,
 
 			//   yield:
 			//     property.purchasePrice &&
@@ -89,24 +90,24 @@ export const getPropertyById = async (
 			id,
 		},
 		include: {
-			currentRenter: true,
-			loans: {
+			CurrentRenter: true,
+			Loans: {
 				orderBy: {
 					endDate: 'desc',
 				},
 			},
-			renterHistory: {
+			RenterHistory: {
 				orderBy: {
-					endDate: 'desc',
+					endRentDate: 'desc',
 				},
 			},
-			children: true,
-			features: true,
-			files: true,
-			maintenances: { orderBy: { date: 'desc' } },
-			owner: true,
-			parent: true,
-			rentAdjustmentHistory: { orderBy: { date: 'desc' } },
+			Children: true,
+			Features: true,
+			Files: true,
+			Maintenances: { orderBy: { date: 'desc' } },
+			Owner: true,
+			Parent: true,
+			RentAdjustmentHistory: { orderBy: { date: 'desc' } },
 		},
 	})
 
@@ -119,28 +120,29 @@ export const getPropertyById = async (
 	return {
 		id: property.id,
 		objectNumber: property.objectNumber,
-		address: property.address,
+		street: property.street,
+		locality: property.locality,
 		zipCode: property.zipCode,
 		houseNumber: property.houseNumber,
-		type: property.type,
+		type: property.Type,
 		rentValue: property.rentValue.toNumber(),
 		additionalCosts: property.additionalCosts.toNumber(),
 		purchasePrice:
 			property.purchasePrice && property.purchasePrice.toNumber(),
-		rentAdjustmentHistory: property.rentAdjustmentHistory,
-		currentRenter: property.currentRenter,
-		loans: property.loans,
-		maintenances: property.maintenances,
-		files: property.files,
+		rentAdjustmentHistory: property.RentAdjustmentHistory,
+		currentRenter: property.CurrentRenter,
+		loans: property.Loans,
+		maintenances: property.Maintenances,
+		files: property.Files,
 		userId: property.userId,
-		owner: property.owner,
+		owner: property.Owner,
 		area: property.area,
 		roomCount: property.roomCount,
 		constructionYear: property.constructionYear,
-		renterHistory: property.renterHistory,
-		features: property.features,
-		parent: property.parent,
-		children: property.children,
+		renterHistory: property.RenterHistory,
+		features: property.Features,
+		parent: property.Parent,
+		children: property.Children,
 		// yield:
 		//   property.purchasePrice &&
 		//   +(((+property.rentValue * 12) / property.purchasePrice.toNumber()) * 100).toFixed(2),

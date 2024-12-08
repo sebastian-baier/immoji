@@ -6,7 +6,6 @@ import {
 	PropertyTypes,
 	RentAdjustmentHistory,
 	Renter,
-	RenterHistory,
 	User,
 	File,
 } from '@prisma/client'
@@ -23,7 +22,8 @@ export enum RentStatus {
 export type PropertyWithDetails = {
 	id: string
 	objectNumber: string | null
-	address: string
+	street: string
+	locality: string
 	zipCode: number
 	houseNumber: string
 	type: PropertyTypes
@@ -41,7 +41,7 @@ export type PropertyWithDetails = {
 	area: number | null
 	constructionYear: number | null
 	roomCount: number | null
-	renterHistory: RenterHistory[]
+	renterHistory: Renter[]
 
 	features: PropertyFeature[]
 	parent: Property | null

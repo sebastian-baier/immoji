@@ -7,8 +7,8 @@ import { Button } from '../custom-ui/button'
 interface AnimatedSubscribeButtonProps {
 	changeButtonColor: string
 	subscribeStatus: boolean
-	initialText: React.ReactElement | string
-	changeText: React.ReactElement | string
+	initialText: React.ReactElement<any> | string
+	changeText: React.ReactElement<any> | string
 }
 
 export const AnimatedSubscribeButton: React.FC<

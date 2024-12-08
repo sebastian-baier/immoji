@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { PropertyTypes } from '@prisma/client'
 import { CreatePropertyButton } from '@/components/create-property-button'
 import { Button } from '@/components/custom-ui/button'
 import { Icons } from '@/components/custom-ui/icons'
@@ -54,10 +55,11 @@ export default async function PropertyPage() {
 				<CreatePropertyButton
 					data={{
 						objectNumber: '253',
-						address: 'Göthering',
+						street: 'Göthering',
+						locality: 'Nürnberg',
 						zipCode: 90451,
 						houseNumber: '10c',
-						type: 'APARTMENT',
+						Type: PropertyTypes.APARTMENT,
 						rentValue: 1000,
 						additionalCosts: 150,
 						purchasePrice: 200000,
@@ -67,6 +69,7 @@ export default async function PropertyPage() {
 						roomCount: 3,
 						parentId: null,
 						features: [{ name: 'Balcony' }, { name: 'Garage' }],
+						propertyManagementId: null,
 					}}
 				>
 					Erstelle Immo mit alle Werten
@@ -74,10 +77,11 @@ export default async function PropertyPage() {
 				<CreatePropertyButton
 					data={{
 						objectNumber: null,
-						address: 'Göthering',
+						street: 'Göthering',
+						locality: 'Stein',
 						zipCode: 90422,
 						houseNumber: '20b',
-						type: 'HOUSE',
+						Type: PropertyTypes.HOUSE,
 						rentValue: 1000,
 						additionalCosts: 150,
 						purchasePrice: null,
@@ -87,6 +91,7 @@ export default async function PropertyPage() {
 						roomCount: null,
 						parentId: null,
 						features: [],
+						propertyManagementId: null,
 					}}
 				>
 					Erstelle Immo ohne optionalen Werten

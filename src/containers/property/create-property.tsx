@@ -1,73 +1,48 @@
 'use client'
 
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { useForm, useFormContext, useWatch } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PropertyTypes } from '@prisma/client'
-import { Libraries, useLoadScript } from '@react-google-maps/api'
 import { defineStepper } from '@stepperize/react'
-import { z } from 'zod'
 import { Button } from '@/components/custom-ui/button'
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import {
+	propertySchema,
+	PropertyFormValues,
+} from '@/lib/zod/property-schemas'
+import { AddressComponent } from './address-component'
 import { PropertyTypesComponent } from './property-types'
 
-const libraries: Libraries = ['places'] as Libraries
-
-const propertyTypesSchema = z.object({
-	type: z.enum([
-		PropertyTypes.APARTMENT,
-		PropertyTypes.HOUSE,
-		PropertyTypes.GARAGE,
-	]),
-})
-
-const addressSchema = z.object({
-	street: z.string().min(1, 'Die Adresse ist erforderlich'),
-	locality: z.string().min(1, 'Die Stadt ist erforderlich'),
-	zipCode: z
-		.string()
-		.min(5, 'Die Postleitzahl muss mindestens 5 Ziffern haben')
-		.max(5, 'Die Postleitzahl darf maximal 5 Ziffern haben')
-		.refine((val) => !isNaN(Number(val)), {
-			message: 'Die Postleitzahl muss eine Zahl sein',
-		}),
-	houseNumber: z
-		.string()
-		.min(1, 'Die Hausnummer ist erforderlich')
-		.regex(/^\d{1,4}[a-z]?$|^\d{1,4}$/, {
-			message:
-				'Die Hausnummer muss aus 1-4 Ziffern bestehen und kann optional mit einem kleinen Buchstaben enden.',
-		}),
-})
-
-export type PropertyTypesFormValues = z.infer<
-	typeof propertyTypesSchema
->
-type AddressFormValues = z.infer<typeof addressSchema>
-
 const { useStepper, steps } = defineStepper(
-	{ id: 'type', label: 'Immobilientyp', schema: propertyTypesSchema },
-	{ id: 'address', label: 'Adresse', schema: addressSchema },
-	{ id: 'complete', label: 'Complete', schema: z.object({}) },
+	{
+		id: 'type',
+		label: 'Immobilientyp',
+		schema: propertySchema.pick({ Type: true }),
+	},
+	{
+		id: 'address',
+		label: 'Adresse',
+		schema: propertySchema.omit({ Type: true }),
+	},
+	{ id: 'complete', label: 'Complete', schema: propertySchema },
 )
 
-export default function Stepper() {
+export default function PropertyStepper() {
 	const stepper = useStepper()
-	const form = useForm({
+	const methods = useForm<PropertyFormValues>({
 		mode: 'onTouched',
 		resolver: zodResolver(stepper.current.schema),
 		defaultValues: {
-			type: PropertyTypes.APARTMENT,
+			Type: PropertyTypes.APARTMENT,
+			street: '',
+			locality: '',
+			zipCode: undefined,
+			houseNumber: '',
 		},
 	})
 
-	const onSubmit = (
-		values: z.infer<typeof stepper.current.schema>,
-	) => {
-		// biome-ignore lint/suspicious/noConsoleLog: <We want to log the form values>
+	const onSubmit = (values: PropertyFormValues) => {
 		console.log(`Form values for step ${stepper.current.id}:`, values)
 		if (stepper.isLast) {
 			stepper.reset()
@@ -77,9 +52,9 @@ export default function Stepper() {
 	}
 
 	return (
-		<Form {...form}>
+		<FormProvider {...methods}>
 			<form
-				onSubmit={form.handleSubmit(onSubmit)}
+				onSubmit={methods.handleSubmit(onSubmit)}
 				className='flex h-full w-[100%] flex-col justify-between rounded-lg border p-6'
 			>
 				<div className='flex flex-col gap-6'>
@@ -157,7 +132,9 @@ export default function Stepper() {
 						>
 							Back
 						</Button>
-						<Button>{stepper.isLast ? 'Complete' : 'Next'}</Button>
+						<Button type='submit'>
+							{stepper.isLast ? 'Complete' : 'Next'}
+						</Button>
 					</div>
 				) : (
 					<Button type='button' onClick={stepper.reset}>
@@ -165,218 +142,7 @@ export default function Stepper() {
 					</Button>
 				)}
 			</form>
-		</Form>
-	)
-}
-
-function AddressComponent() {
-	useWatch({ name: 'street' })
-	const {
-		register,
-		getValues,
-		setValue,
-		formState: { errors },
-	} = useFormContext<AddressFormValues>()
-
-	if (!process.env.NEXT_PUBLIC_GOOGLE_API_KEY)
-		throw Error(
-			'You need to setup ENV Variable "NEXT_PUBLIC_GOOGLE_API_KEY" for Google API',
-		)
-
-	const { isLoaded, loadError } = useLoadScript({
-		googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-		libraries,
-	})
-	const inputRef = useRef<HTMLInputElement>(null)
-
-	useEffect(() => {
-		if (!isLoaded || loadError) return
-
-		const options = {
-			componentRestrictions: { country: 'de' },
-			fields: ['address_components'],
-		}
-
-		// todo inputRef should not be null
-		const autocomplete = new google.maps.places.Autocomplete(
-			inputRef.current,
-			options,
-		)
-		autocomplete.addListener('place_changed', () =>
-			handlePlaceChanged(autocomplete),
-		)
-
-		// return () => autocomplete.removeListener("place_changed", handlePlaceChanged);
-		// todo handleplace missing -> see warning
-	}, [isLoaded, loadError])
-
-	const handlePlaceChanged = async (
-		address: google.maps.places.Autocomplete,
-	) => {
-		if (!isLoaded) return
-		const place = address.getPlace()
-
-		if (!place) {
-			setValue('street', '')
-			return
-		}
-		formData(place)
-	}
-
-	const formData = (data: google.maps.places.PlaceResult) => {
-		const addressComponents =
-			data?.address_components as google.maps.GeocoderAddressComponent[]
-
-		const componentMap = {
-			subPremise: '',
-			premise: '',
-			street_number: '',
-			route: '',
-			country: '',
-			postal_code: '',
-			administrative_area_level_2: '',
-			administrative_area_level_1: '',
-			locality: '',
-		}
-		console.log(addressComponents)
-
-		console.log(errors)
-
-		for (const component of addressComponents) {
-			const componentType = component.types[0]
-			if (componentMap.hasOwnProperty(componentType)) {
-				// todo fix wrong index
-				componentMap[componentType] = component.long_name
-			}
-		}
-		const formattedAddress =
-			`${componentMap.subPremise} ${componentMap.premise}  ${componentMap.route} ${componentMap.street_number}`.trim()
-
-		console.log(formattedAddress)
-
-		setValue('zipCode', componentMap.postal_code)
-		setValue('street', formattedAddress)
-		setValue('locality', componentMap.locality)
-	}
-
-	const handleChange = (event) => {
-		const { name, value } = event.target
-		setValue('street', value)
-	}
-
-	return (
-		isLoaded && (
-			<div className='p-4'>
-				<div className='flex w-full flex-col'>
-					<label
-						htmlFor={register('street').name}
-						className='text-md'
-					>
-						Adresse
-					</label>
-					<Input
-						id={register('street').name}
-						{...register('street')}
-						type='text'
-						name='streetAddress'
-						placeholder='Adresse eingeben'
-						onChange={handleChange}
-						ref={inputRef}
-						value={getValues('street')}
-						className='block w-full rounded-md border p-2'
-					/>
-					{errors.street && (
-						<span className='text-sm text-red-600'>
-							{errors.street.message}
-						</span>
-					)}
-				</div>
-				<div className='grid grid-cols-3 gap-5 pt-5'>
-					<div className='flex w-full flex-col'>
-						<label
-							htmlFor={register('houseNumber').name}
-							className='text-md'
-						>
-							Wohnungsnummer
-						</label>
-						<Input
-							id={register('houseNumber').name}
-							{...register('houseNumber')}
-							type='text'
-							name='houseNumber'
-							placeholder='Wohnungsnummer'
-							className='block w-full rounded-md border p-2'
-						/>
-						{errors.houseNumber && (
-							<span className='text-sm text-red-600'>
-								{errors.houseNumber.message}
-							</span>
-						)}
-					</div>
-					<div className='flex w-full flex-col'>
-						<label
-							htmlFor={register('locality').name}
-							className='text-md'
-						>
-							Stadt
-						</label>
-						<Input
-							id={register('locality').name}
-							{...register('locality')}
-							type='text'
-							name='city'
-							placeholder='Stadt'
-							className='block w-full rounded-md border p-2'
-						/>
-						{errors.locality && (
-							<span className='text-sm text-red-600'>
-								{errors.locality.message}
-							</span>
-						)}
-					</div>
-					<div className='flex w-full flex-col'>
-						<label
-							htmlFor={register('zipCode').name}
-							className='text-md'
-						>
-							PLZ
-						</label>
-						<Input
-							id={register('zipCode').name}
-							{...register('zipCode')}
-							type='text'
-							name='zipCode'
-							placeholder='PLZ'
-							className='block w-full rounded-md border p-2'
-						/>
-						{errors.zipCode && (
-							<span className='text-sm text-red-600'>
-								{errors.zipCode.message}
-							</span>
-						)}
-					</div>
-
-					{/* todo check if still needed */}
-
-					{/* <div className="space-y-2">
-                <label
-                    htmlFor={register('cvv').name}
-                    className="block text-sm font-medium text-primary"
-                >
-                    CVV
-                </label>
-                <Input
-                    id={register('cvv').name}
-                    {...register('cvv')}
-                    className="block w-full p-2 border rounded-md"
-                />
-                {errors.cvv && (
-                    <span className="text-sm text-destructive">{errors.cvv.message}</span>
-                )}
-            </div> */}
-				</div>
-			</div>
-		)
+		</FormProvider>
 	)
 }
 

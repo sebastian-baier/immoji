@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { getCurrentSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/database/prisma'
-import { propertySchema } from '@/lib/zod/property'
+import { propertySchema } from '@/lib/zod/property-schemas'
 import { PropertyWithNumbers } from '@/types/property'
 
 export async function createProperty(data: PropertyWithNumbers) {
@@ -19,10 +19,11 @@ export async function createProperty(data: PropertyWithNumbers) {
 		const existingProperty = await prisma.property.findFirst({
 			where: {
 				objectNumber: validatedData.objectNumber,
-				address: validatedData.address,
+				street: validatedData.street,
+				locality: validatedData.locality,
 				zipCode: +validatedData.zipCode,
 				houseNumber: validatedData.houseNumber,
-				type: validatedData.type,
+				Type: validatedData.Type,
 			},
 		})
 
@@ -35,10 +36,11 @@ export async function createProperty(data: PropertyWithNumbers) {
 		const property = await prisma.property.create({
 			data: {
 				objectNumber: validatedData.objectNumber,
-				address: validatedData.address,
+				street: validatedData.street,
+				locality: validatedData.locality,
 				zipCode: +validatedData.zipCode,
 				houseNumber: validatedData.houseNumber,
-				type: validatedData.type,
+				Type: validatedData.Type,
 				rentValue: validatedData.rentValue?.toString(),
 				additionalCosts: validatedData.additionalCosts?.toString(),
 				purchasePrice: validatedData.purchasePrice,
@@ -48,15 +50,15 @@ export async function createProperty(data: PropertyWithNumbers) {
 				constructionYear: validatedData.constructionYear,
 				roomCount: validatedData.roomCount,
 				parentId: validatedData.parentId,
-				features: {
-					connectOrCreate: validatedData.features?.map((feature) => ({
+				Features: {
+					connectOrCreate: validatedData.Features?.map((feature) => ({
 						where: { name: feature.name },
 						create: { name: feature.name },
 					})),
 				},
 			},
 			include: {
-				features: true,
+				Features: true,
 			},
 		})
 

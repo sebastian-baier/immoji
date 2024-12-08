@@ -1,15 +1,8 @@
 'use server'
 
 import { notFound } from 'next/navigation'
-import { Button } from '@/components/custom-ui/button'
-import { Icons } from '@/components/custom-ui/icons'
 import { Badge } from '@/components/ui/badge'
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { getPropertyById } from '@/actions/property/get-properties'
@@ -25,7 +18,7 @@ export default async function Property(props: {
 }) {
 	const property = await getPropertyById((await props.params).id)
 
-	if (!property) notFound()
+	if (!property) return notFound()
 
 	const status = !property.currentRenter
 		? RentStatus.NOT_RENTED
